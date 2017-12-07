@@ -5,10 +5,9 @@ var chars = File.read("01.txt").bytes.toList
 var sum = 0
 for (i in 0...chars.count) {
     var current = chars[i]
-    // if current is the last character, wrap around and get the first
-    var next = (i == chars.count - 1) ? chars[0] : chars[i + 1]
+    var charToMatch = chars[(i + chars.count / 2) % chars.count]
 
-    if (current == next) {
+    if (current == charToMatch) {
         // convert from ascii
         sum = sum + (current - 48)
     }
