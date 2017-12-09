@@ -1,5 +1,35 @@
 // Day 03: Spiral Memory
 
+class Grid {
+    // Create a square grid
+    construct new(size) {
+        _size = size
+        _list = List.filled(size * size, 0)
+    }
+
+    size { _size }
+
+    [x, y] { _list[y * _size + x] }
+    [x, y]=(value) {
+        _list[y * _size + x] = value
+    }
+}
+
+var sumNeighbors = Fn.new {|memory, startX, startY|
+    var sum = 0
+    for (y in (startY-1)..(startY+1)) {
+        if (y >= 0 && y < memory.size) {
+            for (x in (startX-1)..(startX+1)) {
+                if (x >= 0 && x < memory.size) {
+                    sum = sum + memory[x, y]
+                }
+            }
+        }
+    }
+
+    memory[startX, startY] = sum
+}
+
 var x = 0
 var y = 0
 
@@ -13,10 +43,27 @@ var turnCount = 0
 var xStep = 1
 var yStep = 0
 
+var memory = Grid.new(9) // Minimum size that will fit our solution, found by empirical testing
+var origin = (9 / 2).floor // zero based integer index
+
+// initial 1
+memory[origin, origin] = 1
+
+var result = 0
+var numIterations = 0
+
 // input: 265149
-for (i in 1...265149) {
+while (true) {
+    numIterations = numIterations + 1
+
     x = x + xStep
     y = y + yStep
+
+    sumNeighbors.call(memory, origin + x, origin + y)
+    if (memory[origin + x, origin + y] > 265149) {
+        result = memory[origin + x, origin + y]
+        break
+    }
 
     stepsUntilTurn = stepsUntilTurn - 1
 
@@ -35,5 +82,4 @@ for (i in 1...265149) {
     }
 }
 
-var distance = x.abs + y.abs
-System.print("Distance: " + distance.toString)
+System.print("Result is %(result) after %(numIterations) iterations")
