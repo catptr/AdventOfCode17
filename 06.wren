@@ -12,6 +12,16 @@ var indexOfMaxValue = Fn.new {|memory|
     return result
 }
 
+var indexOf = Fn.new {|list, item|
+    for (i in 0...list.count) {
+        if (list[i] == item) {
+            return i
+        }
+    }
+
+    return -1
+}
+
 // http://www.cse.yorku.ca/~oz/hash.html
 // Lists of numbers are basically just strings so why not use a string hashing function?
 var djb2 = Fn.new {|list|
@@ -30,6 +40,8 @@ var banksToFill = memory.count - 1
 
 var seenConfigurations = [djb2.call(memory)]
 var numCycles = 0
+
+var result = 0
 
 var startTime = System.clock
 while (true) {
@@ -66,6 +78,8 @@ while (true) {
     
     var hash = djb2.call(memory)
     if (seenConfigurations.contains(hash)) {
+        // How many cycles from start of loop
+        result = numCycles - indexOf.call(seenConfigurations, hash)
         break
     } else {
         seenConfigurations.add(hash)
@@ -73,3 +87,4 @@ while (true) {
 }
 
 System.print("%(numCycles) redistribution cycles had to be completed which took %(System.clock - startTime) seconds.")
+System.print("The loop is %(result) cycles long.")
