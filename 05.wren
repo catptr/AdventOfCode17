@@ -6,12 +6,18 @@ var jumpOffsets = File.read("05.txt").split("\n").map {|s| Num.fromString(s) }.t
 var numSteps = 0
 var ip = 0
 
+var startTime = System.clock
 while (ip < jumpOffsets.count) {
     var offset = jumpOffsets[ip]
-    jumpOffsets[ip] = offset + 1
+    
+    if (offset >= 3) {
+        jumpOffsets[ip] = offset - 1
+    } else {
+        jumpOffsets[ip] = offset + 1
+    }
 
     ip = ip + offset
     numSteps = numSteps + 1
 }
 
-System.print("Number of steps to exit: %(numSteps)")
+System.print("Number of steps to exit: %(numSteps), took %(System.clock - startTime) seconds.")
