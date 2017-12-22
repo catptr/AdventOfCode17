@@ -33,8 +33,6 @@ var sumNeighbors = Fn.new {|memory, startX, startY|
 var x = 0
 var y = 0
 
-var direction = 0
-
 var stepLength = 1
 var stepsUntilTurn = stepLength
 
@@ -68,9 +66,9 @@ while (true) {
     stepsUntilTurn = stepsUntilTurn - 1
 
     if (stepsUntilTurn == 0) {
-        direction = direction + Num.pi / 2 // rotate 90 degrees
-        xStep = direction.cos.round
-        yStep = direction.sin.round
+        var oldX = xStep
+        xStep = yStep * -1
+        yStep = oldX
 
         turnCount = turnCount + 1
 
